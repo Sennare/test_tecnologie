@@ -12,8 +12,70 @@
   <div id="myholder"></div>
   <script type="text/javascript">
 
+var graph = new joint.dia.Graph;
+var paper = new joint.dia.Paper({
+  el: $('#myholder'),
+  width: 600,
+  height: 600,
+  gridSize: 20,
+  model: graph
+});
+
+var boundary = [
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 232.65 200.78"><defs><style>.cls-1,.cls-2{fill:#fff;}.cls-2{stroke:#000;stroke-miterlimit:10;}</style></defs><title>Asset 1</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><circle class="cls-1" cx="132.26" cy="100.39" r="99.89" transform="translate(-32.25 122.93) rotate(-45)"/><path d="M132.26,1a99.39,99.39,0,1,1-99.39,99.39A99.5,99.5,0,0,1,132.26,1m0-1A100.39,100.39,0,1,0,232.65,100.39,100.39,100.39,0,0,0,132.26,0Z"/><line class="cls-2" x1="0.5" y1="27.61" x2="0.5" y2="178.19"/><line class="cls-2" x1="0.5" y1="100.39" x2="33.13" y2="100.39"/></g></g></svg>'
+].join('');
+
+
+var el1 = new joint.shapes.basic.Image({
+  size: {
+    width: 100,
+    height: 100
+  },
+  position: {
+    x: 100,
+    y: 100
+  },
+    inPorts: ['in1','in2'],
+    outPorts: ['out'],
+    ports: {
+        groups: {
+            'in': {
+                attrs: {
+                    '.port-body': {
+                        fill: '#16A085'
+                    }
+                }
+            },
+            'out': {
+                attrs: {
+                    '.port-body': {
+                        fill: '#E74C3C'
+                    }
+                }
+            }
+        }
+    },
+  attrs: {
+    image: {
+      width: '100%',
+      height: '100%',
+      'xlink:href': 'data:image/svg+xml;utf8,' + encodeURIComponent(boundary),
+      preserveAspectRatio: 'xMinYMin slice'
+    },
+    'text': { 'font-size': 14, 'ref-x': .5, 'ref-y': 0, ref: 'image', 'y-alignment': 'top', 'x-alignment': 'middle', 'text': 'test' }
+  }
+});
+
+var el2 = el1.clone().position(0,300);
+
+graph.addCells([el1, el2]);
+/*
+
+
+    boundary_svg = '';
     $.get('./elements/boundary.svg', function(svg){
-      console.log( svg );
+      boundary_svg += svg;
+      start();
     }, 'text');
 
     var graph = new joint.dia.Graph;
@@ -26,28 +88,38 @@
         gridSize: 1
     });
 
-    var rect = new joint.shapes.basic.Rect({
-        position: { x: 100, y: 30 },
-        size: { width: 100, height: 30 },
-        attrs: { rect: { fill: 'blue' }, text: { text: 'my box', fill: 'white' } }
-    });
+    function start() {
+      console.log(boundary_svg);
+      var rect = new joint.shapes.basic.Rect({
+          position: { x: 100, y: 30 },
+          size: { width: 100, height: 100 },
+          attrs: { 
+            image: {
+              width: 100,
+              height: 100,
+              'xlink:href': 'data:image/svg+xml;utf8,' + encodeURIComponent(boundary_svg),
+              preserveAspectRatio: 'none'
+            }
+          }
+      });
 
-    var rect2 = rect.clone();
-    rect2.translate(300);
+      var rect2 = rect.clone();
+      rect2.translate(300);
 
-    var link = new joint.dia.Link({
-        source: { id: rect.id },
-        target: { id: rect2.id }
-    });
+      var link = new joint.dia.Link({
+          source: { id: rect.id },
+          target: { id: rect2.id }
+      });
 
-    graph.addCells([rect, rect2, link]);
+      graph.addCells([rect, rect2, link]);
 
-    $("#add_rect").click(function() {
-      var rettangolo = rect.clone();
-      rettangolo.translate(150, 150);
-      graph.addCell(rettangolo);
-    })
-
+      $("#add_rect").click(function() {
+        var rettangolo = rect.clone();
+        rettangolo.translate(150, 150);
+        graph.addCell(rettangolo);
+      })
+    }
+*/
   </script>
 </body>
 </html>
