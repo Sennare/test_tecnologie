@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="joint.css" />
+    <link rel="stylesheet" href="style.css" />
     <script src="jquery.js"></script>
     <script src="lodash.js"></script>
     <script src="backbone.js"></script>
@@ -11,13 +12,13 @@
   <button id="add_rect">Add rect</button>
   <div id="myholder"></div>
   <script type="text/javascript">
-
+/*
 var graph = new joint.dia.Graph;
 var paper = new joint.dia.Paper({
   el: $('#myholder'),
-  width: 600,
+  width: 800,
   height: 600,
-  gridSize: 20,
+  gridSize: 5,
   model: graph
 });
 
@@ -35,91 +36,65 @@ var el1 = new joint.shapes.basic.Image({
     x: 100,
     y: 100
   },
-    inPorts: ['in1','in2'],
-    outPorts: ['out'],
-    ports: {
-        groups: {
-            'in': {
-                attrs: {
-                    '.port-body': {
-                        fill: '#16A085'
-                    }
-                }
-            },
-            'out': {
-                attrs: {
-                    '.port-body': {
-                        fill: '#E74C3C'
-                    }
-                }
-            }
-        }
-    },
   attrs: {
     image: {
-      width: '100%',
-      height: '100%',
-      'xlink:href': 'data:image/svg+xml;utf8,' + encodeURIComponent(boundary),
-      preserveAspectRatio: 'xMinYMin slice'
+        width: 100,
+        height: 100,
+        'xlink:href': 'data:image/svg+xml;utf8,' + encodeURIComponent(boundary),
+        preserveAspectRatio: 'xMinYMin slice'
     },
-    'text': { 'font-size': 14, 'ref-x': .5, 'ref-y': 0, ref: 'image', 'y-alignment': 'top', 'x-alignment': 'middle', 'text': 'test' }
+    text: { 'font-size': 14, 'ref-x': .5, 'ref-y': -2, ref: 'image', 'y-alignment': 'middle', 'x-alignment': 'middle', 'text': 'test' }
   }
 });
 
 var el2 = el1.clone().position(0,300);
 
 graph.addCells([el1, el2]);
-/*
+*/
 
 
-    boundary_svg = '';
     $.get('./elements/boundary.svg', function(svg){
-      boundary_svg += svg;
-      start();
+        var boundary_svg = [
+          svg
+        ].join('');
+      start(actor, boundary, control, entity);
     }, 'text');
 
     var graph = new joint.dia.Graph;
-
     var paper = new joint.dia.Paper({
-        el: $('#myholder'),
-        width: 600,
-        height: 200,
-        model: graph,
-        gridSize: 1
+      el: $('#myholder'),
+      width: 800,
+      height: 600,
+      gridSize: 5,
+      model: graph
     });
 
-    function start() {
-      console.log(boundary_svg);
-      var rect = new joint.shapes.basic.Rect({
-          position: { x: 100, y: 30 },
-          size: { width: 100, height: 100 },
-          attrs: { 
+    function start(actor, boundary, control, entity) {
+      var el1 = new joint.shapes.basic.Image({
+          size: {
+            width: 100,
+            height: 100
+          },
+          position: {
+            x: 100,
+            y: 100
+          },
+          attrs: {
             image: {
-              width: 100,
-              height: 100,
-              'xlink:href': 'data:image/svg+xml;utf8,' + encodeURIComponent(boundary_svg),
-              preserveAspectRatio: 'none'
-            }
+                width: 100,
+                height: 100,
+                'xlink:href': 'data:image/svg+xml;utf8,' + encodeURIComponent(boundary),
+                preserveAspectRatio: 'xMinYMin slice'
+            },
+            text: { 'font-size': 14, 'ref-x': .5, 'ref-y': -2, ref: 'image', 'y-alignment': 'middle', 'x-alignment': 'middle', 'text': 'test' }
           }
-      });
+        });
 
-      var rect2 = rect.clone();
-      rect2.translate(300);
+        var el2 = el1.clone().position(0,300);
 
-      var link = new joint.dia.Link({
-          source: { id: rect.id },
-          target: { id: rect2.id }
-      });
-
-      graph.addCells([rect, rect2, link]);
-
-      $("#add_rect").click(function() {
-        var rettangolo = rect.clone();
-        rettangolo.translate(150, 150);
-        graph.addCell(rettangolo);
-      })
+        graph.addCells([el1, el2]);
     }
-*/
+
   </script>
 </body>
 </html>
