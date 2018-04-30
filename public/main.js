@@ -9,17 +9,41 @@ class Ironworks {
 
         this.elements = [];
         this.queueElements = [];
+
+        this.focus = false;
+
+        this.loadRes("boundary.svg");
+        this.loadRes("control.svg");
+        this.loadRes("entity.svg");
+        this.loadRes("user.svg");
     }
 
-    initializeEditor(target, x, y) {
+    initializeEditor(nome_target, name_editor) {
         if (!this.editorInitialized) {
+            let target = $("#"+nome_target);
+
             this.graph = new joint.dia.Graph;
             this.paper = new joint.dia.Paper({
-                el: $(target),
-                width: x,
-                height: y,
+                el: target,
+                width: target.width(),
+                height: target.height(),
                 gridSize: 5,
                 model: this.graph
+            });
+
+            this.paper.on('cell:pointerdown',
+                function(cellView, evt, x, y) {
+                    console.log(cellView);
+                    let text = cellView.model.attributes.attrs.text.text;
+                    iw.focus = cellView;
+                    $("#nome").val(text);
+                }
+            );
+
+            $("#"+name_editor).on("input", function(e) {
+                if (this.focus !== undefined) {
+                    iw.focus.model.attr('text/text', e.currentTarget.value.toString());
+                }
             });
         }
     }
@@ -43,11 +67,7 @@ class Ironworks {
 
         this.processing++;
         $.get('./elements/boundary.svg', function(ret){
-            let compressed = [
-                ret
-            ].join('');
-
-            iw.setResource("boundary", compressed)
+            iw.setResource("boundary", ret)
         }, 'text');
 
         this.processing++;
@@ -109,13 +129,17 @@ class Ironworks {
         let key = this.elements.push( this.resources[elem].clone().position(x, y));
         this.graph.addCells( this.elements[key-1] );
     }
+
+    focusElem () {
+
+    }
 }
 
 iw = new Ironworks();
-iw.initializeEditor('#myholder', 800, 600);
-iw.loadRes("boundary.svg");
 
 $(function() {
+    iw.initializeEditor('my_editor', 'nome');
+
     $("#add_boundary").click(function() {
         iw.newElem("boundary", 10, 10, "LoginPage");
     });
@@ -128,4 +152,11 @@ $(function() {
     $("#add_user").click(function() {
         iw.newElem("user", 10, 10, "LoginPage");
     });
-})
+});
+/*
+var link = new joint.dia.Link({
+    source: { x: 10, y: 20 },
+    target: { x: 350, y: 20 },
+    attrs: {}
+});
+*/

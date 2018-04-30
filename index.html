@@ -9,15 +9,27 @@
     <script src="joint.js"></script>
 </head>
 <body>
-    <button id="add_boundary">Add boundary</button>
-    <button id="add_control">Add control</button>
-    <button id="add_entity">Add entity</button>
-    <button id="add_user">Add user</button>
-  <div id="myholder"></div>
-  <script type="text/javascript">
+    <div class="container">
+        <div class="row">
+            <aside class="sidebar col">
+                <button class="row" id="add_boundary">Add boundary</button>
+                <button class="row" id="add_control">Add control</button>
+                <button class="row" id="add_entity">Add entity</button>
+                <button class="row" id="add_user">Add user</button>
+                <div class="clear"></div>
+            </aside>
 
+            <div class="content">
+                <section class="topbar row">
+                    <input type="text" id="nome" class="name" \>
+                </section>
+                <section class="editor-holder row" id="editor_holder">
+                    <div id="my_editor" class="editor"></div>
+                </section>
+            </div>
+        </div>
+    </div>
 
-  </script>
   <script src="main.js"></script>
 </body>
 </html>
