@@ -11,11 +11,19 @@ class Ironworks {
         this.queueElements = [];
 
         this.focus = false;
+        
+        this.states = Object.freeze({
+            idle_stat:1,
+            link_source:2,
+            link_dest:3
+        });
+        this.state = this.states.idle_stat;
+        this.sourceID = false;
 
         this.loadRes("boundary.svg");
         this.loadRes("control.svg");
         this.loadRes("entity.svg");
-        this.loadRes("user.svg");
+        this.loadRes("actor.svg");
     }
 
     initializeEditor(nome_target, name_editor) {
@@ -33,10 +41,56 @@ class Ironworks {
 
             this.paper.on('cell:pointerdown',
                 function(cellView, evt, x, y) {
-                    console.log(cellView);
-                    let text = cellView.model.attributes.attrs.text.text;
                     iw.focus = cellView;
-                    $("#nome").val(text);
+                    console.log(cellView);
+                    //console.log(iw.focus.model.attributes.id.toString());
+
+                    switch (iw.state) {
+                        case iw.states.idle_stat:
+                            if (cellView.model.attributes.type === "devs.Link")
+                                break;
+                            let text = cellView.model.attributes.attrs.text.text;
+                            iw.focus = cellView;
+                            $("#nome").val(text);
+                            break;
+
+                        case iw.states.link_source:
+                            if (cellView.model.attributes.type === "devs.Link")
+                                break;
+                            // boh
+                            iw.sourceID = iw.focus.model.attributes.id.toString() + '';
+                            iw.state = iw.states.link_dest;
+
+                            $("#nome").val("Selezione oggetto di destinazione");
+                            break;
+
+                        case iw.states.link_dest:
+                            if (cellView.model.attributes.type === "devs.Link")
+                                break;
+                            if (iw.sourceID === iw.focus.model.attributes.id.toString()) {
+                                $("#nome").val("Impossibile creare un link con sorgente e destinazione uguale");
+                            }else {
+                                let link = new joint.shapes.devs.Link({
+                                    source: {
+                                        id: iw.sourceID,
+                                        port: 'out'
+                                    },
+                                    target: {
+                                        id: iw.focus.model.attributes.id.toString(),
+                                        port: 'in'
+                                    },
+                                    connector: {name: 'rounded'},
+                                    router: {name: 'metro'}
+                                });
+                                iw.graph.addCell(link);
+                                $("#nome").val("Perfettto! Link creato");
+                            }
+                            iw.state = iw.states.idle_stat;
+                            break;
+
+                        default:
+                            alert("L'editor è in uno stato di errore");
+                    }
                 }
             );
 
@@ -71,8 +125,8 @@ class Ironworks {
         }, 'text');
 
         this.processing++;
-        $.get('./elements/user.svg', function(ret){
-            iw.setResource("user", ret)
+        $.get('./elements/actor.svg', function(ret){
+            iw.setResource("actor", ret)
         }, 'text');
 
         this.processing++;
@@ -109,6 +163,9 @@ class Ironworks {
             }
         });
 
+        this.resources[name].set('inPorts', ['in']);
+        this.resources[name].set('outPorts', ['out']);
+
         if (this.processing === 0)
             this.startEditor();
     }
@@ -130,8 +187,11 @@ class Ironworks {
         this.graph.addCells( this.elements[key-1] );
     }
 
-    focusElem () {
-
+    newLink() {
+        if (this.state === this.states.idle_stat) {
+            this.state = this.states.link_source;
+            $("#nome").val("Selezione oggetto di partenza");
+        }
     }
 }
 
@@ -149,14 +209,10 @@ $(function() {
     $("#add_entity").click(function() {
         iw.newElem("entity", 10, 10, "LoginPage");
     });
-    $("#add_user").click(function() {
-        iw.newElem("user", 10, 10, "LoginPage");
+    $("#add_actor").click(function() {
+        iw.newElem("actor", 10, 10, "LoginPage");
+    });
+    $("#add_link").click(function() {
+        iw.newLink();
     });
 });
-/*
-var link = new joint.dia.Link({
-    source: { x: 10, y: 20 },
-    target: { x: 350, y: 20 },
-    attrs: {}
-});
-*/
