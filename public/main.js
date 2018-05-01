@@ -197,6 +197,9 @@ class Ironworks {
 
 iw = new Ironworks();
 
+let testExport = "";
+let testImport = "";
+
 $(function() {
     iw.initializeEditor('my_editor', 'nome');
 
@@ -214,5 +217,48 @@ $(function() {
     });
     $("#add_link").click(function() {
         iw.newLink();
+    });
+
+    $('#generate').click(function () {
+        console.log("----");
+
+        let toSend = iw.graph.toJSON();
+            toSend = JSON.stringify(iw.graph);
+        testExport = toSend;
+        console.log(toSend);
+
+        console.log("----");
+        // Call to server
+        $.ajax({
+            url: '/test',
+            type: 'post',
+            data: toSend,
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+                console.log("Reiceving...");
+                console.log(data);
+                testImport = data;
+            },
+            error: function () {
+                console.log("Error");
+            }
+        })
+    });
+
+    $('#load').click(function() {
+        let imported = testImport;
+        console.log('Importing...string:');
+        console.log(testImport);
+        console.log('Importing...json:');
+        console.log(imported);
+        //let fukingTest = JSON.stringify(testExport);
+        iw.graph.fromJSON(testImport);
+        //iw.graph.fromJSON(imported);
+        /*console.log(fukingTest);
+        console.log('------');
+        console.log(testImport);
+        console.log('------');
+        console.log(testImport === fukingTest);*/
     });
 });

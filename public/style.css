@@ -90,5 +90,8 @@ body {
 }
 
 .name {
-    width: 100%;
+    width: calc(100% - 10px);
+    border: 0;
+    border-bottom: 1px solid #cccccc;
+    padding: 3px 5px;
 }
