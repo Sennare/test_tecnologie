@@ -55,7 +55,12 @@ class Ironworks {
                 width: target.width(),      // We will pick current placeholder dimension
                 height: target.height(),    // TODO: Resize of the page...
                 gridSize: 5,                // Spaces between anchor point
-                model: this.graph
+                model: this.graph,
+                linkPinning: false,
+                interactive: {
+                    vertexAdd: false,
+                    arrowheadMove: false
+                }
             });
 
             this.paper.on('cell:pointerdown',
@@ -115,8 +120,7 @@ class Ironworks {
                                         id: iw.focus.model.attributes.id.toString(),
                                         port: 'in'
                                     },
-                                    connector: {name: 'rounded'},
-                                    router: {name: 'metro'}
+                                    connector: {name: 'rounded'}
                                 });
                                 // Adding link to graph
                                 iw.graph.addCell(link);
