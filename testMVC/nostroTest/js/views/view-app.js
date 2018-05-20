@@ -30,7 +30,8 @@ var app = app || {};
             return this;
         },
 
-        'new-event': function() {
+        'new-event': function(e) {
+            // e.target();
             app.events.create(this.getAttributes());
             app.events.sync();
         },
