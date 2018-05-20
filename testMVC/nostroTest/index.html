@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" data-framework="backbonejs">
+<head>
+    <meta charset="utf-8">
+    <title>Backbone.js testing</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="todoapp">
+    <header class="header">
+        <h1>Testing</h1>
+    </header>
+    <section class="main">
+        <div class="placeholder"></div>
+    </section>
+    <footer class="footer"></footer>
+</section>
+<footer class="info">
+    <p>Elia Rebellato</p>
+</footer>
+
+<script type="text/template" id="app-template">
+    <span>Questo è il template di test: <%= test %></span>
+
+    <input type="text" id="event-date" />
+    <input type="text" id="event-descr" />
+    <input type="submit" id="new-event" />
+
+</script>
+
+<script src="js/jquery.js"></script>
+<script src="js/underscore.js"></script>
+<script src="js/backbone.js"></script>
+<script src="js/backbone.localStorage.js"></script>
+<script src="js/models/event.js"></script>
+<script src="js/collections/events.js"></script>
+<script src="js/views/view-app.js"></script>
+<script src="js/views/view-toolbar-elements.js"></script>
+<script src="js/routers/router.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
