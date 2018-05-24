@@ -1,15 +1,11 @@
-/*global $ */
-/*jshint unused:false */
 var app = app || {};
 
-(function () {
+(function ($) {
     'use strict';
 
     app.viewApp = Backbone.View.extend({
-        tagName: 'div',
-        className: 'app-container',
         template: _.template($('#app-template').html()),
-        el: '.placeholder',
+        el: '.placeholder', // target
 
         events: {
             // Events here
@@ -17,23 +13,31 @@ var app = app || {};
         },
 
         initialize: function() {
-            this.render();
 
+            this.$el.html(this.template({'test': 'example'}));
             this.$date = this.$('#event-date');
             this.$descr= this.$('#event-descr');
+            this.$list= this.$('.cliccabili');
 
-            app.events.fetch({reset: true});
+            var toolbar = new app.viewToolbarElements();
+            this.$list.html(toolbar.render().el);
+
+            this.listenTo(toolbar, 'clicked', this.test)
+            //app.events.fetch({reset: true});
         },
 
         render: function() {
-            this.$el.html(this.template({'test': 'example'}));
-            return this;
+        },
+
+
+        test: function() {
+            console.log('test');
         },
 
         'new-event': function(e) {
             // e.target();
             app.events.create(this.getAttributes());
-            app.events.sync();
+            //app.events.sync();
         },
 
         getAttributes: function () {
@@ -43,4 +47,4 @@ var app = app || {};
             };
         },
     });
-})();
+})(jQuery);

@@ -19,7 +19,7 @@ var app = app || {};
         lol(query) {
             console.log("res "+query);
         }
-    })
+    });
 
     app.routing = new router();
     Backbone.history.start();
